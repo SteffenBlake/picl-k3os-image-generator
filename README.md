@@ -1,5 +1,18 @@
-:warning: **This project is archived.** :warning:<br/>
-[k3os itself is dead](https://github.com/rancher/k3os/issues/846), and I have since switched to simply installing k3s on a bare Ubuntu install. Thank you to all contributors and users!
+:warning: **Root project is archived.** :warning:<br/>
+[k3os itself is dead](https://github.com/rancher/k3os/issues/846), Original Maintainer has since switched to simply installing k3s on a bare Ubuntu install. Thank you to all contributors and users!
+
+# Switch to BlueKrypto fork of K3OS for triage life support
+
+[BlueKrypto](https://github.com/BlueKrypto/k3os) has forked k3os and is, as of writing this, keeping it maintained for their own personal use cases. For this reason I have forked this repo to keep it up to date with BlueKrypto's fork of K3OS
+
+# List of Triage changes
+
+## 2023-07-07
+
+* Increased root size from 1000 to 2000 to make room for larger k3os image
+* Pointed build script at BlueKrypto's fork, rather than original rancher repo
+* Updated latest pi firmware version to [1.20230405](https://github.com/raspberrypi/firmware/releases/tag/1.20230405)
+* Updated latest k3os version to [v0.24.13-k3s1-r0](https://github.com/BlueKrypto/k3os/releases/tag/v0.24.13-k3s1-r0)
 
 # PiCl k3os image generator
 
