@@ -4,10 +4,12 @@ set -e
 
 
 # Set this to default to a KNOWN GOOD pi firmware (e.g. 1.20200811); this is used if RASPBERRY_PI_FIRMWARE env variable is not specified
-DEFAULT_GOOD_PI_VERSION="1.20210201"
+DEFAULT_GOOD_PI_VERSION="1.20230405"
 
 # Set this to default to a KNOWN GOOD k3os (e.g. v0.11.0); this is used if K3OS_VERSION env variable is not specified
-DEFAULT_GOOD_K3OS_VERSION="v0.19.11-k3s1r0"
+DEFAULT_GOOD_K3OS_VERSION="v0.24.13-k3s1-r0"
+
+K3OS_MAINTAINER="BlueKrypto"
 
 ## Check if we have any configs
 if [ -z "$(ls config/*.yaml)" ]; then
@@ -131,13 +133,13 @@ fi
 
 if [ -z "${K3OS_VERSION}" ]; then
     echo "K3OS_VERSION env variable was not set - defaulting to known version [${DEFAULT_GOOD_K3OS_VERSION}]"
-    dl_dep k3os-rootfs-arm64.tar.gz https://github.com/rancher/k3os/releases/download/${DEFAULT_GOOD_K3OS_VERSION}/k3os-rootfs-arm64.tar.gz
+    dl_dep k3os-rootfs-arm64.tar.gz https://github.com/${K3OS_MAINTAINER}/k3os/releases/download/${DEFAULT_GOOD_K3OS_VERSION}/k3os-rootfs-arm64.tar.gz
 elif [ "${K3OS_VERSION}" = "latest" ]; then
     echo "K3OS_VERSION env variable set to 'latest' - using latest release"
-    dl_dep k3os-rootfs-arm64.tar.gz "$(wget -qO - https://api.github.com/repos/rancher/k3os/releases/latest | jq -r '.assets[] | select(.name == "k3os-rootfs-arm64.tar.gz") .browser_download_url')"
+    dl_dep k3os-rootfs-arm64.tar.gz "$(wget -qO - https://api.github.com/repos/${K3OS_MAINTAINER}/k3os/releases/latest | jq -r '.assets[] | select(.name == "k3os-rootfs-arm64.tar.gz") .browser_download_url')"
 else
     echo "K3OS_VERSION env variable set to ${K3OS_VERSION}"
-    dl_dep k3os-rootfs-arm64.tar.gz https://github.com/rancher/k3os/releases/download/${K3OS_VERSION}/k3os-rootfs-arm64.tar.gz
+    dl_dep k3os-rootfs-arm64.tar.gz https://github.com/${K3OS_MAINTAINER}/k3os/releases/download/${K3OS_VERSION}/k3os-rootfs-arm64.tar.gz
 fi
 
 # To find the URL for these packages:
@@ -174,7 +176,7 @@ if [ "$IMAGE_TYPE" = "raspberrypi" ]; then
 	# Create two partitions: boot and root.
 	BOOT_CAPACITY=60
 	# Initial root size. The partition will be resized to the SD card's maximum on first boot.
-	ROOT_CAPACITY=1000
+	ROOT_CAPACITY=2000
 	IMAGE_SIZE=$(($BOOT_CAPACITY + $ROOT_CAPACITY))
 
 	truncate -s ${IMAGE_SIZE}M $IMAGE
